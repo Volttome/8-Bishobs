@@ -1,31 +1,20 @@
-import time
-import os
-
-os.system('cls')
-print("\n"*2)
-
-n = int(input("Enter the size of the board : "))
-print("\n"*2)
-
+import time , os
+os.system('cls') ; print("\n"*2) ; n = int(input("Enter the size of the board : ")) ; print("\n"*2)
 bord = [[' .' for _ in range(n)] for _ in range(n)]
 
-
-def safe(row, col):
-    # چک کردن سطر
+def safe(row, col):   #check row
     for j in range(col):
         if bord[row][j] == ' ∎':
             return False
-
-    # چک کردن قطر اصلی (↖)
-    for i in range(1, col + 1):
+            
+    for i in range(1, col + 1): #check original diyagnal
         r = row - i 
         c = col - i
         if r >= 0 and c >= 0:
             if bord[r][c] == ' ∎':
                 return False
-
-    # چک کردن قطر فرعی (↗)
-    for i in range(1, col + 1):
+                
+    for i in range(1, col + 1): #check not original diyagnal
         r = row + i
         c = col - i
         if r < n and c >= 0:
@@ -34,8 +23,7 @@ def safe(row, col):
 
     return True
 
-
-def show():
+def show(): #showing the bord in reall time
     os.system('cls')
     print("\n"*4)
     for r in bord:
@@ -44,26 +32,18 @@ def show():
         print("\n"*2)
     time.sleep(0.8)
 
-
 def solve(col):
     if col == n:
         return True
 
-    for row in range(n):  # حالا برای هر ستون، بررسی می‌کنیم که کدوم سطر مناسب است
-        # نمایش تلاش برای بررسی این خونه
-        bord[row][col] = ' ?' ; show() ; bord[row][col] = ' .'# نشون می‌ده الان داریم بررسی می‌کنیم
-        
-          # پاکش می‌کنیم چون هنوز تصمیم نگرفتیم
-
+    for row in range(n):  #checking eche col for best row 
+        bord[row][col] = ' ?' ; show() ; bord[row][col] = ' .' #show tring
         if safe(row, col):
             bord[row][col] = ' ∎'
             show()
-            if solve(col + 1):  # حرکت به ستون بعدی
+            if solve(col + 1):  #going for the next col
                 return True
-            bord[row][col] = ' .'  # پاک کردن ∎ برای بک ترک
+            bord[row][col] = ' .'  # Deleting the Bishobs for back tracking
             show()
     return False
-
-
-solve(0)  # شروع از ستون 0
-print("\n"*2)
+solve(0) #start this shitt show whit col 0
